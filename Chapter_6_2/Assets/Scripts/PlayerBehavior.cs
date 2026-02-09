@@ -19,11 +19,13 @@ public class Player_Behavior : MonoBehaviour
     public GameObject Bullet;
     public float BulletSpeed = 100f;
     private bool _isShooting;
+    private GameBehavior _gameManager;
     void Start()
     {
         //3
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
     void Update()
     {
@@ -57,6 +59,7 @@ public class Player_Behavior : MonoBehaviour
             GameObject newBullet = Instantiate(Bullet, spawnPos, this.transform.rotation);
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
             bulletRB.linearVelocity = this.transform.forward * BulletSpeed;
+            _isShooting = false;
         }
     }
     private bool IsGrounded()
@@ -69,4 +72,11 @@ public class Player_Behavior : MonoBehaviour
                                             QueryTriggerInteraction.Ignore);
         return grounded;
     }
+    void OnCollisionEnter(Collision collision)
+    {
+    if(collision.gameObject.name == "Enemy")
+        {
+            _gameManager.HP -= 1;
+        }
+    } 
 }
