@@ -2,9 +2,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using CustomExtensions;
 
 public class GameBehavior : MonoBehaviour
 {
+    private string _state;
+    private string State
+    {
+        get { return _state; }
+        set { _state = value; }
+    }
     // Tracks how many collectible items the player has picked up
     private int _itemsCollected = 0;
     // Tracks the player's current health
@@ -88,12 +96,18 @@ public class GameBehavior : MonoBehaviour
         // Hide win/lose buttons at the start
         WinButton.gameObject.SetActive(false);
         LossButton.gameObject.SetActive(false);
-    }
 
+        Initialize();
+    }
+    public void Initialize()
+    {
+        _state = "Game Manager Initialized..";
+        _state.FancyDebug();
+        Debug.Log(_state);
+    }
     // Reloads the scene and resets the game
     public void RestartScene()
     {
-        SceneManager.LoadScene(0);
-        Time.timeScale = 1f; // Resume normal time
+        Utilities.RestartLevel(0);
     }
 }
